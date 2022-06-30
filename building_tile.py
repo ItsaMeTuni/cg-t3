@@ -7,11 +7,13 @@ from textures import *
 from vec import Vec
 from tile import Tile, tile_size
 
+heights = [int(x) for x in open('heights').readlines()]
+
 class BuildingTile(Tile):
     def __init__(self, tile_x, tile_y):
         super().__init__(tile_x, tile_y, (0.3, 0, 0))
 
-        self.height = uniform(50, 150)
+        self.height = heights[randint(0, len(heights) - 1)]
         self.color = colors[randint(0, len(colors) - 1)]
 
     def render(self):
