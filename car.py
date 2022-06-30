@@ -11,6 +11,8 @@ class Car:
         self.is_destroyed = False
         self.speed = 100
         self.rotation = 0
+        self.fuel = 100
+        self.fuel_consumption = 0.001
 
     def tick(self, delta):
         self.position = self.position + Vec(0, 0, self.speed).rotate(self.rotation, Vec(0, 1, 0)) * delta
@@ -19,8 +21,11 @@ class Car:
             self.rotation += 90 * delta
         elif is_key_pressed(b'd'):
             self.rotation -= 90 * delta
+        self.fuel -= self.fuel_consumption
+
+        if self.fuel <= 0:
+            self.speed = 0
         
-    
     def render(self):
         glPushMatrix()
         glTranslatef(self.position.x, self.position.y, self.position.z)
@@ -28,5 +33,8 @@ class Car:
         glColor3f(1, 1, 1)
         glutSolidCube(5)
         glPopMatrix()
+    
+    def fuel_tank(self):
+        self.fuel = 100
 
         

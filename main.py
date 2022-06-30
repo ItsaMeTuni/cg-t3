@@ -8,6 +8,7 @@ import mouse
 from vec import Vec
 from camera import Camera
 from car import Car
+from fuel import Fuel
 from textures import *
 from road_tile import RoadTile
 from empty_tile import EmptyTile
@@ -24,6 +25,9 @@ def init():
 
     car = Car()
     entities.append(car)
+
+    fuel = Fuel()
+    entities.append(fuel)
 
     entities.append(Camera(car))
     create_map_tiles()
