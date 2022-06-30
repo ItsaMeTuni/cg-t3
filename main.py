@@ -14,6 +14,7 @@ from textures import *
 from road_tile import RoadTile
 from empty_tile import EmptyTile
 from colors import get_colors
+from building_tile import BuildingTile
 
 camera = None
 car = None
@@ -84,6 +85,9 @@ def create_map_tiles():
                     
             elif tile == '1':
                 entities.append(EmptyTile(x, y)) 
+
+            elif tile == '2':
+                entities.append(BuildingTile(x, y))
 
             x += 1
 
