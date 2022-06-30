@@ -4,6 +4,9 @@ from OpenGL.GL import *
 import time
 import keyboard
 from entity import entities
+import mouse
+from vec import Vec
+from camera import Camera
 
 def init():
     glutInit(sys.argv)
@@ -12,26 +15,32 @@ def init():
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(100, 100)
 
-    window = glutCreateWindow("Matrix Stack")
+    entities.append(Camera())
+
+    window = glutCreateWindow("T3")
     glutDisplayFunc(display)
     glutReshapeFunc(reshape)
     glutKeyboardFunc(keyboard.on_down)
     glutKeyboardUpFunc(keyboard.on_up)
+    glutPassiveMotionFunc(mouse.on_move)
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    glEnable(GL_BLEND)
+    glClearDepth(1.0) 
+    glDepthFunc(GL_LESS)
+    glEnable(GL_DEPTH_TEST)
+    glEnable (GL_CULL_FACE )
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+
     glClearColor(0, 0, 0, 1)
     glutMainLoop()
 
 def reshape(w, h):
     glViewport(0, 0, w, h)
+
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(-10, 10, -10, 10, -1.0, 1.0)
+    gluPerspective(60, w/h, 0.01, 50)
 
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
-
+last_display_timestamp = 0
 def display():
     global last_display_timestamp
     global entities
@@ -42,6 +51,13 @@ def display():
     glClearColor(0, 0, 0, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    # glMatrixMode(GL_MODELVIEW)
+    # glLoadIdentity()
+    # gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0)
+
+    glColor3f(1, 1, 1)
+    glutWireCube(5)
+
     for entity in entities:
         entity.tick(delta)
         entity.render()
@@ -51,6 +67,18 @@ def display():
     
     glutSwapBuffers()
     glutPostRedisplay()
+
+# last_mouse_pos = Vec(0, 0)
+# last_camera_target = Vec(0, 0)
+# def update_camera():
+#     global last_mouse_pos, last_camera_target
+
+#     delta_pos = mouse.position - last_mouse_pos
+
+
+#     gluLookAt(*last_camera_target, 0, 0, 0, 0, 1, 0)
+
+#     last_mouse_pos = mouse.position
 
 def do_collision_tests():
     collisions = []
