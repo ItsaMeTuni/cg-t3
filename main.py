@@ -13,7 +13,6 @@ from fuel import Fuel
 from textures import *
 from road_tile import RoadTile
 from empty_tile import EmptyTile
-from colors import get_colors
 from building_tile import BuildingTile
 
 camera = None
@@ -27,9 +26,6 @@ def init():
 
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(100, 100)
-
-    colors = get_colors()
-    print(colors)
 
     car = Car()
     entities.append(car)   
@@ -75,6 +71,8 @@ def create_map_tiles():
     for line in lines:
         x = 0
         for tile in line.split(','):
+            print((x, y))
+
             if tile == '0':
                 entities.append(RoadTile(x, y))
 
@@ -84,10 +82,11 @@ def create_map_tiles():
                     car.fuel_items.append(fuel)
                     
             elif tile == '1':
-                entities.append(EmptyTile(x, y)) 
+                if uniform(0, 1) > .7:
+                    entities.append(BuildingTile(x, y))
+                else:
+                    entities.append(EmptyTile(x, y)) 
 
-            elif tile == '2':
-                entities.append(BuildingTile(x, y))
 
             x += 1
 

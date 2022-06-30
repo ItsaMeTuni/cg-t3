@@ -9,7 +9,7 @@ from keyboard import is_key_pressed
 class Camera:
 
     def __init__(self, car):
-        self.position = Vec(500, 50, 500)
+        self.position = Vec(500, 1000, 500)
         self.accumulated_mouse_pos = Vec(0, 0, 0)
         self.sensitivity = .1
         self.car = car
