@@ -53,9 +53,5 @@ class Car:
         glColor3f(1, 1, 1)
         glutSolidCube(5)
         glPopMatrix()
-    
-    def fuel_tank(self):
-        print('Fuel')
-        self.fuel = 100
 
         
