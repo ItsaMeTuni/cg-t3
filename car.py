@@ -3,6 +3,7 @@ from keyboard import is_key_pressed, pressed_keys
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
+from tile import tile_size
 
 class Car:
 
@@ -55,7 +56,8 @@ class Car:
         self.check_bounds_collision()
         
         for tile in self.empty_tiles:
-            if 0:
+            if (self.position.x <= tile.position.x + tile_size and self.position.x >= tile.position.x) and (self.position.z <= tile.position.z + tile_size and self.position.z >= tile.position.z):
+                print('collides')
                 self.position = self.last_position
         
     def render(self):
