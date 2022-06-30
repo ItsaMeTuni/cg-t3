@@ -9,7 +9,7 @@ class Car:
     def __init__(self):
         self.position = Vec(10, 2.5, 0)
         self.is_destroyed = False
-        self.speed = 10
+        self.speed = 100
         self.rotation = 0
 
     def tick(self, delta):

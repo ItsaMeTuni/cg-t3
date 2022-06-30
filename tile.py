@@ -4,7 +4,7 @@ from OpenGL.GL import *
 from textures import *
 from vec import Vec
 
-tile_size = 15
+tile_size = 50
 
 class Tile:
 

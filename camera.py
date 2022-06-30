@@ -5,12 +5,10 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 import mouse
 
-
-
 class Camera:
 
     def __init__(self, car):
-        self.position = Vec(50, 30, 50)
+        self.position = Vec(500, 50, 500)
         self.accumulated_mouse_pos = Vec(0, 0, 0)
         self.sensitivity = .1
         self.car = car
