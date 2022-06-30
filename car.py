@@ -25,15 +25,15 @@ class Car:
 
         self.was_space_pressed_last_frame = space_pressed
 
-        if self.fuel <= 0 or self.is_stopped:
-            return
-
-        self.position = self.position + Vec(0, 0, self.speed).rotate(self.rotation, Vec(0, 1, 0)) * delta
-        
         if is_key_pressed(b'a'):
             self.rotation += 90 * delta
         elif is_key_pressed(b'd'):
             self.rotation -= 90 * delta
+
+        if self.fuel <= 0 or self.is_stopped:
+            return
+
+        self.position = self.position + Vec(0, 0, self.speed).rotate(self.rotation, Vec(0, 1, 0)) * delta
 
         self.fuel -= self.fuel_consumption * delta
         print(self.fuel)
@@ -55,6 +55,7 @@ class Car:
         glPopMatrix()
     
     def fuel_tank(self):
+        print('Fuel')
         self.fuel = 100
 
         

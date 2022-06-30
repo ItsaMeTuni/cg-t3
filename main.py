@@ -26,14 +26,12 @@ def init():
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(100, 100)
 
-
     car = Car()
     entities.append(car)   
 
     camera = Camera(car)
     entities.append(camera)
     create_map_tiles()
-
 
     window = glutCreateWindow("T3")
     glutDisplayFunc(display)
