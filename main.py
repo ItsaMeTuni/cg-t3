@@ -13,6 +13,7 @@ from fuel import Fuel
 from textures import *
 from road_tile import RoadTile
 from empty_tile import EmptyTile
+from colors import get_colors
 
 camera = None
 car = None
@@ -25,6 +26,9 @@ def init():
 
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(100, 100)
+
+    colors = get_colors()
+    print(colors)
 
     car = Car()
     entities.append(car)   
