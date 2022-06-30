@@ -57,7 +57,6 @@ class Car:
         
         for tile in self.empty_tiles:
             if (self.position.x <= tile.position.x + tile_size and self.position.x >= tile.position.x) and (self.position.z <= tile.position.z + tile_size and self.position.z >= tile.position.z):
-                print('collides')
                 self.position = self.last_position
         
     def render(self):
