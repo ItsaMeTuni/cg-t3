@@ -7,8 +7,13 @@ from entity import entities
 import mouse
 from vec import Vec
 from camera import Camera
+from car import Car
+from textures import *
+from road_tile import RoadTile
 
 def init():
+    global asphalt_texture_id
+
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_RGBA)
 
@@ -16,6 +21,8 @@ def init():
     glutInitWindowPosition(100, 100)
 
     entities.append(Camera())
+    entities.append(Car())
+    entities.append(RoadTile())
 
     window = glutCreateWindow("T3")
     glutDisplayFunc(display)
@@ -27,8 +34,12 @@ def init():
     glClearDepth(1.0) 
     glDepthFunc(GL_LESS)
     glEnable(GL_DEPTH_TEST)
-    glEnable (GL_CULL_FACE )
+    glEnable(GL_CULL_FACE)
+    glEnable(GL_TEXTURE_2D)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+    load_textures()
 
     glClearColor(0, 0, 0, 1)
     glutMainLoop()
@@ -38,9 +49,9 @@ def reshape(w, h):
 
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60, w/h, 0.01, 50)
+    gluPerspective(60, w/h, 0.01, 5000)
 
-last_display_timestamp = 0
+last_display_timestamp = time.time()
 def display():
     global last_display_timestamp
     global entities
@@ -50,19 +61,21 @@ def display():
 
     glClearColor(0, 0, 0, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW)
+    # glLoadIdentity()
+
+
+
 
     # glMatrixMode(GL_MODELVIEW)
     # glLoadIdentity()
     # gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0)
 
-    glColor3f(1, 1, 1)
-    glutWireCube(5)
-
     for entity in entities:
         entity.tick(delta)
         entity.render()
 
-    do_collision_tests()
+    # do_collision_tests()
     remove_destroyed_entities()
     
     glutSwapBuffers()

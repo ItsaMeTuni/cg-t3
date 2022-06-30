@@ -9,7 +9,6 @@ class Entity:
         self.position = Vec(0, 0, 0)
         self.rotation_axis = Vec(0, 1, 0)
         self.rotation_angle = 0
-        self.hitbox_radius = hitbox_radius
         self.is_destroyed = False
 
     def tick(self, delta):
@@ -27,23 +26,11 @@ class Entity:
         self.is_destroyed = True
 
     def do_collision_test(self, other):
-        other_hitbox_radius = other.hitbox_radius
-
-        diff = self.position - other.position
-        dist = diff.magnitude()
-
-        collides = dist <= other_hitbox_radius + self.hitbox_radius
-
-        return collides
+        return False
         
 
     def hitbox_contains_point(self, point):
-        hitbox = self.get_hitbox()
-        hitbox_min = hitbox[0]
-        hitbox_max = hitbox[1]
-
-        return (point.x >= hitbox_min.x and point.x <= hitbox_max.x and
-            point.y >= hitbox_min.y and point.y <= hitbox_max.y)
+        return False
 
     def collision_enter(self, other):
         pass
