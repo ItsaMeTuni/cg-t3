@@ -7,7 +7,7 @@ from OpenGL.GL import *
 class Car:
 
     def __init__(self):
-        self.position = Vec(0, 0, 0)
+        self.position = Vec(10, 2.5, 0)
         self.is_destroyed = False
         self.speed = 10
         self.rotation = 0
@@ -26,7 +26,7 @@ class Car:
         glTranslatef(self.position.x, self.position.y, self.position.z)
         glRotatef(self.rotation, 0, 1, 0)
         glColor3f(1, 1, 1)
-        glutWireCube(5)
+        glutSolidCube(5)
         glPopMatrix()
 
         

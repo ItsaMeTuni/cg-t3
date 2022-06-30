@@ -10,19 +10,24 @@ from camera import Camera
 from car import Car
 from textures import *
 from road_tile import RoadTile
+from empty_tile import EmptyTile
 
 def init():
     global asphalt_texture_id
 
     glutInit(sys.argv)
-    glutInitDisplayMode(GLUT_RGBA)
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH)
 
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(100, 100)
 
-    entities.append(Camera())
-    entities.append(Car())
-    entities.append(RoadTile())
+
+    car = Car()
+    entities.append(car)
+
+    entities.append(Camera(car))
+    create_map_tiles()
+
 
     window = glutCreateWindow("T3")
     glutDisplayFunc(display)
@@ -36,6 +41,8 @@ def init():
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_CULL_FACE)
     glEnable(GL_TEXTURE_2D)
+    glDepthFunc(GL_LESS)
+    glDepthMask(GL_TRUE)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
@@ -44,12 +51,31 @@ def init():
     glClearColor(0, 0, 0, 1)
     glutMainLoop()
 
+def create_map_tiles():
+    f = open('map.csv')
+    lines = f.readlines()
+
+    x = 0
+    y = 0
+    for line in lines:
+        x = 0
+        for tile in line.split(','):
+            if tile == '0':
+                entities.append(RoadTile(x, y))
+            elif tile == '1':
+                entities.append(EmptyTile(x, y))
+
+            x += 1
+
+        y += 1
+                
+
 def reshape(w, h):
     glViewport(0, 0, w, h)
 
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60, w/h, 0.01, 5000)
+    gluPerspective(90, w/h, 0.01, 50000)
 
 last_display_timestamp = time.time()
 def display():
@@ -62,14 +88,6 @@ def display():
     glClearColor(0, 0, 0, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW)
-    # glLoadIdentity()
-
-
-
-
-    # glMatrixMode(GL_MODELVIEW)
-    # glLoadIdentity()
-    # gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0)
 
     for entity in entities:
         entity.tick(delta)
