@@ -85,8 +85,9 @@ def create_map_tiles():
                 if uniform(0, 1) > .7:
                     entities.append(BuildingTile(x, y))
                 else:
-                    entities.append(EmptyTile(x, y)) 
-
+                    empty_tile = EmptyTile(x, y)
+                    entities.append(empty_tile) 
+                    car.empty_tiles.append(empty_tile)
 
             x += 1
 

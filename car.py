@@ -8,6 +8,7 @@ class Car:
 
     def __init__(self):
         self.position = Vec(10, 2.5, 0)
+        self.lest_position = self.position
         self.is_destroyed = False
         self.speed = 100
         self.rotation = 0
@@ -19,9 +20,12 @@ class Car:
         self.size = 5
         self.min_bounds = Vec(0, 0, 0)
         self.max_bounds = Vec(1000, 0, 1000)
+        self.empty_tiles = []
 
 
     def tick(self, delta):
+        self.last_position = self.position
+
         space_pressed = is_key_pressed(b' ')
         if space_pressed and space_pressed != self.was_space_pressed_last_frame:
             self.is_stopped = not self.is_stopped
@@ -49,6 +53,10 @@ class Car:
                 self.fuel += 100
 
         self.check_bounds_collision()
+        
+        for tile in self.empty_tiles:
+            if 0:
+                self.position = self.last_position
         
     def render(self):
         glPushMatrix()
