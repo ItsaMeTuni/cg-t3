@@ -1,3 +1,4 @@
+from random import random, uniform
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
@@ -13,8 +14,11 @@ from textures import *
 from road_tile import RoadTile
 from empty_tile import EmptyTile
 
+camera = None
+car = None
+
 def init():
-    global asphalt_texture_id
+    global asphalt_texture_id, camera, car
 
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH)
@@ -24,12 +28,10 @@ def init():
 
 
     car = Car()
-    entities.append(car)
+    entities.append(car)   
 
-    fuel = Fuel()
-    entities.append(fuel)
-
-    entities.append(Camera(car))
+    camera = Camera(car)
+    entities.append(camera)
     create_map_tiles()
 
 
@@ -72,8 +74,14 @@ def create_map_tiles():
         for tile in line.split(','):
             if tile == '0':
                 entities.append(RoadTile(x, y))
+
+                if uniform(0, 1) > 0.8:
+                    fuel = Fuel(x, y)
+                    entities.append(fuel)
+                    car.fuel_items.append(fuel)
+                    
             elif tile == '1':
-                entities.append(EmptyTile(x, y))
+                entities.append(EmptyTile(x, y)) 
 
             x += 1
 
@@ -82,10 +90,8 @@ def create_map_tiles():
 
 def reshape(w, h):
     glViewport(0, 0, w, h)
-
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    gluPerspective(90, w/h, 0.01, 50000)
+    camera.w = w
+    camera.h = h
 
 last_display_timestamp = time.time()
 def display():
@@ -103,44 +109,10 @@ def display():
         entity.tick(delta)
         entity.render()
 
-    # do_collision_tests()
     remove_destroyed_entities()
     
     glutSwapBuffers()
     glutPostRedisplay()
-
-# last_mouse_pos = Vec(0, 0)
-# last_camera_target = Vec(0, 0)
-# def update_camera():
-#     global last_mouse_pos, last_camera_target
-
-#     delta_pos = mouse.position - last_mouse_pos
-
-
-#     gluLookAt(*last_camera_target, 0, 0, 0, 0, 1, 0)
-
-#     last_mouse_pos = mouse.position
-
-def do_collision_tests():
-    collisions = []
-
-    for entity in entities:
-        if entity.is_destroyed:
-            continue
-
-        for other in entities:
-            if other is entity or entity.is_destroyed:
-                continue
-
-            if (other, entity) in collisions:
-                continue
-            
-            collides = entity.do_collision_test(other)
-            if collides:
-                entity.collision_enter(other)
-                other.collision_enter(entity)
-
-            collisions.append((entity, other))
 
 def remove_destroyed_entities():
     for entity in entities:
